@@ -1,8 +1,6 @@
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://wahyuramadhan:uuCv6EquRhCNaiPB@gc01.mihudax.mongodb.net/?retryWrites=true&w=majority"
+const uri = process.env.MONGO_URI;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -11,17 +9,15 @@ const client = new MongoClient(uri, {
   }
 });
 
-async function run() {
-    try {
-        const database = client.db('sample_mflix');
-        const movies = database.collection('movies');
-        // Query for a movie that has the title 'Back to the Future'
-        const query = { title: 'Back to the Future' };
-        const movie = await movies.findOne(query);
-        console.log(movie);
-      } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-      }
+async function connect() {
+  try {
+    const database = client.db('gc01');
+    const users = database.collection('users');
+    const user = await users.find().toArray();
+    console.log(user);
+  } finally {
+    await client.close();
+  }
 }
-run().catch(console.dir);
+
+module.exports = connect;
