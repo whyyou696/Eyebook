@@ -14,10 +14,11 @@ async function connect() {
     const database = client.db('gc01');
     const users = database.collection('users');
     const user = await users.find().toArray();
-    console.log(user);
-  } finally {
-    await client.close();
+  } catch (error) {
+    console.log(error.message);
   }
 }
+const database = client.db('gc01');
 
-module.exports = connect;
+
+module.exports = { connect, database }
