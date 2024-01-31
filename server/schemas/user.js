@@ -3,7 +3,6 @@ const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { GraphQLError } = require("graphql");
 
-
 const typeDefs = `#graphql
   type User {
     _id: ID

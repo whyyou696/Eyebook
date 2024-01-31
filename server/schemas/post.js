@@ -37,7 +37,6 @@ const typeDefs = `#graphql
     addComment(_id: ID, content: String!): Comments
     addLike(_id: ID): Likes
   }
-  
 `;
 
 const resolvers = {

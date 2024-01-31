@@ -5,10 +5,11 @@ const { connect } = require("./config/mongodb");
 const authentication= require("./middlewares/authentication");
 const { typeDefs: userTypeDefs, resolvers: userResolvers } = require("./schemas/user");
 const { typeDefs: postTypeDefs, resolvers: postResolvers } = require("./schemas/post");
+const { typeDefs: followTypeDefs, resolvers: followResolvers } = require("./schemas/follow");
 
 const server = new ApolloServer({
-  typeDefs: [userTypeDefs, postTypeDefs],
-  resolvers: [userResolvers, postResolvers],
+  typeDefs: [userTypeDefs, postTypeDefs, followTypeDefs],
+  resolvers: [userResolvers, postResolvers, followResolvers],
 });
 
 connect().then(() => {
