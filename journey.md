@@ -4,10 +4,10 @@
 
 ### Setup Project: Tema Aplikasi, Apollo Server, GraphQL
 Silahkan setup project aplikasi server kamu:
-- [ ] Install MongoDB database pada komputer kamu atau menggunakan MongoDB Atlas
-- [ ] Install package yang dibutuhkan: @apollo/server, graphql dan mongodb sebagai MongoDB driver
-- [ ] Pilih tema sesuai dengan pilihan dan kesepakatan instructor, tuliskan dalam README github kamu
-- [ ] Buatlah aplikasi server GraphQL menggunakan Apollo Server dengan PORT default: 3000
+- [x] Install MongoDB database pada komputer kamu atau menggunakan MongoDB Atlas
+- [x] Install package yang dibutuhkan: @apollo/server, graphql dan mongodb sebagai MongoDB driver
+- [x] Pilih tema sesuai dengan pilihan dan kesepakatan instructor, tuliskan dalam README github kamu
+- [x] Buatlah aplikasi server GraphQL menggunakan Apollo Server dengan PORT default: 3000
 
 
 ### GraphQL - Apollo Server

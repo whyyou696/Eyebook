@@ -3,8 +3,10 @@ const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { GraphQLError } = require("graphql");
 
+
 const typeDefs = `#graphql
   type User {
+    _id: ID
     name: String
     username: String!
     email: String!
@@ -16,7 +18,9 @@ const typeDefs = `#graphql
   }
 
   type Query {
-    users: [User]
+    getAllUser: [User]
+    getById(id: ID!): User
+    searchUser(searchQuery: String!): [User]
   }
 
   input UserInput {
@@ -34,10 +38,24 @@ const typeDefs = `#graphql
 
 const resolvers = {
   Query: {
-    users: async () => {
+    getAllUser: async (_,__,{ authentication }) => {
+      const auth = await authentication();
+      if (!auth) {
+        throw new GraphQLError("Invalid User");
+      }
       const users = await User.getAllUser();
       return users;
     },
+    getById: async (_, args, { authentication }) => {
+      const auth = await authentication();
+      const getUserbyId = await User.getById(args.id)
+      return getUserbyId;
+  },
+    searchUser: async (_, { searchQuery }, {authentication}) => {
+      const auth = await authentication()
+      const match = await User.searchUser(searchQuery);
+      return match;
+    }
   },
   Mutation: {
     addUser: async (_, { UserInput }) => {
@@ -48,24 +66,20 @@ const resolvers = {
         email,
         password: hashPassword(password),
       };
-
       // check email exist
       const emailExist = await User.getByEmail({ email });
       if (emailExist) {
         throw new GraphQLError("Email already exist");
       }
-
       // check username exist
       const usernameExist = await User.getByUsername({ username });
       if (usernameExist) {
         throw new GraphQLError("Username already exist");
       }
-
       // check password
       if (password.length < 5) {
         throw new GraphQLError("Password must be at least 5 characters");
       }
-
       // check email format
       if (email && !email.includes("@")) {
         throw new GraphQLError("Invalid email format");
@@ -98,11 +112,10 @@ const resolvers = {
       const access_token = signToken({
         id: user._id,
       });
-      return { access_token }; // return token object
+      return { access_token };
     },
   },
 };
-
 module.exports = {
   typeDefs,
   resolvers,

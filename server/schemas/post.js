@@ -12,7 +12,7 @@ const typeDefs = `#graphql
   }
 
   type Query {
-    posts: [Post]
+    getAllPost: [Post]
   }
 
   type Mutation {
@@ -23,7 +23,7 @@ const typeDefs = `#graphql
 
 const resolvers = {
   Query: {
-    posts: async () => {
+    getAllPost: async () => {
       const users = await Post.getAllPost();
       return users;
     },

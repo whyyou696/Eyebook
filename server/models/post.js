@@ -8,10 +8,10 @@ class Post {
         return result
     }
     static async createPost(newPost) {
-        console.log(newPost, "<<<masuk")
         const posts = database.collection("posts")
         const result = await posts.insertOne(newPost)
         return result
     }
 }
+
 module.exports = Post;

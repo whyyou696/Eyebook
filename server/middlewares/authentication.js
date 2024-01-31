@@ -1,6 +1,6 @@
 const { GraphQLError } = require("graphql");
 const { verifyToken } = require("../helpers/jwt");
-const User  = require("../models/user");
+const User = require("../models/user");
 
 async function authentication(req) {
     const token = req.headers.authorization;
@@ -29,6 +29,8 @@ async function authentication(req) {
           code: "INVALID_TOKEN",
         },
       });
+      console.log(user)
     return { id: user._id, email: user.email, username: user.username };
 };
+
 module.exports = authentication;
