@@ -22,6 +22,11 @@ class User {
         const user = await users.findOne({ email })
         return user
     }
-}
 
+    static async getById({ _id }) {
+        const users = database.collection("users")
+        const user = await users.findOne({ _id })
+        return user
+    }
+}
 module.exports = User

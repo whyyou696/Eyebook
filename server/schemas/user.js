@@ -75,10 +75,10 @@ const resolvers = {
       return newUser;
     },
     login: async (_, { username, password }) => {
-      if (!username || username == "") {
+      if (!username || username == " ") {
         throw new GraphQLError("Username is required");
       }
-      if (!password || password == "") {
+      if (!password || password == " ") {
         throw new GraphQLError("Password is required");
       }
       const user = await User.getByUsername({ username });
@@ -86,7 +86,6 @@ const resolvers = {
       if (!user) {
         throw new GraphQLError("User not found");
       }
-
       const checkPassword = comparePassword(password, user.password);
 
       if (!checkPassword) {
@@ -99,7 +98,6 @@ const resolvers = {
       const access_token = signToken({
         id: user._id,
       });
-
       return { access_token }; // return token object
     },
   },
