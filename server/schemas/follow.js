@@ -11,35 +11,43 @@ const typeDefs = `#graphql
     updatedAt: String
     }
 
+    type UnfollowResponse {
+        message: String
+    }
     type Mutation {
     follow(userId: ID): Follow
+    unfollow(userId: ID): UnfollowResponse
   }
-
-`;
+  `;
 
 const resolvers = {
     Mutation: {
-        follow: async (parent, args, contextValue) => {
-            try {
-                const currentUser = await contextValue.authentication();
+        follow: async (parent, args, {authentication}) => {
+                const auth = await authentication();
                 const { userId } = args;
-
-                const follows = await Follow.getFollow(userId, currentUser.id);
-                
+                const follows = await Follow.getFollow(userId, auth.id);
                 if (follows) {
                     throw new GraphQLError('Already following', {
-                        extensions: { code: '400 Bad Request' },
+                        extensions: { code: 'BAD_REQUEST' },
                     });
                 }
-
-                const follow = await Follow.followUser(userId, currentUser.id);
-                console.log("Follow Mutation Result:", currentUser.id);
+                const follow = await Follow.followUser(userId, auth.id);
+                // console.log("Follow Mutation Result:", auth.id);
                 return follow;
-            } catch (error) {
-                console.error("Follow Mutation Error:", error);
-                throw error;
-            }
         },
+        unfollow: async (_, args, { authentication }) => {
+            const auth = await authentication();
+            const { userId } = args;
+            const follows = await Follow.getFollow(userId, auth.id);
+            if (!follows) {
+              throw new GraphQLError("Not following", {
+                extensions: { code: "BAD_REQUEST" },
+              });
+            }
+            const unfollowResult = await Follow.unfollowUser(userId, auth.id);
+            // console.log("Unfollow Mutation Result:", auth.id);
+            return unfollowResult;
+          },
     },
 };
 

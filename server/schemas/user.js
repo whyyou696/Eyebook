@@ -45,9 +45,9 @@ const resolvers = {
       const users = await User.getAllUser();
       return users;
     },
-    getById: async (_, args, { authentication }) => {
+    getById: async (_,{id}, { authentication }) => {
       const auth = await authentication();
-      const getUserbyId = await User.getById(args.id)
+      const getUserbyId = await User.getById(id)
       return getUserbyId;
   },
     searchUser: async (_, { searchQuery }, {authentication}) => {
