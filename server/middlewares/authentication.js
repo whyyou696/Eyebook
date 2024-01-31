@@ -29,7 +29,6 @@ async function authentication(req) {
           code: "INVALID_TOKEN",
         },
       });
-      console.log(user)
     return { id: user._id, email: user.email, username: user.username };
 };
 

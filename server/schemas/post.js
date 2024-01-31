@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const Post = require("../models/post");
 
 const typeDefs = `#graphql
@@ -7,29 +8,57 @@ const typeDefs = `#graphql
     tags: [String]
     imgUrl: String
     authorId: ID!
+    comments: [Comments]
+    likes: [Likes]
+    createdAt: String
+    updatedAt: String
+  }
+
+  type Comments {
+    content: String!
+    username: String!
+    createdAt: String
+    updatedAt: String
+  }
+
+  type Likes {
+    username: String!
     createdAt: String
     updatedAt: String
   }
 
   type Query {
     getAllPost: [Post]
+    getPostById(id: ID!): Post
   }
 
   type Mutation {
     createPost(content: String!, tags: [String], imgUrl: String): Post
+    addComment(_id: ID, content: String!): Comments
+    addLike(_id: ID): Likes
   }
   
 `;
 
 const resolvers = {
   Query: {
-    getAllPost: async () => {
+    getAllPost: async (_,__,{ authentication }) => {
+      const auth = await authentication();
+      if (!auth) {
+        throw new GraphQLError("Invalid User");
+      }
       const users = await Post.getAllPost();
       return users;
     },
+    getPostById: async (_, { id }) => {
+      const post = await Post.getPostById(id);
+      return post;
+    }
   },
   Mutation: {
-    createPost: async (_, { content, tags, imgUrl }) => {
+    createPost: async (_, { content, tags, imgUrl }, { authentication }) => {
+      
+      const { id } = await authentication();
       if (!content) {
         throw new Error("Content is required");
       }
@@ -37,12 +66,37 @@ const resolvers = {
         content,
         tags,
         imgUrl,
-        authorId,
+        comments: [],
+        likes: [],
+        authorId: new ObjectId(id),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
       await Post.createPost(newPost);
       return newPost;
+    },
+
+    addComment: async (_, {_id, content }, { authentication }) => {
+      const { username } = await authentication();
+      const newComment = {
+        content,
+        username: username,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      await Post.addComment(_id,newComment);
+      return newComment;
+    },
+
+    addLike: async (_, { _id }, { authentication }) => {
+      const { username } = await authentication();
+      const newLike = {
+        username: username,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      await Post.addLike(_id,newLike);
+      return newLike;
     },
   },
 };
