@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Card({ username, post, imageUrl, onPress, navigation }) {
+export default function Card({ username, post, imageUrl, navigation }) {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -19,7 +19,7 @@ export default function Card({ username, post, imageUrl, onPress, navigation }) 
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => navigation.navigate('Details')} // Navigasi ke halaman detail
+          onPress={() => navigation.navigate('DetailsPost')} // Navigasi ke halaman detail
         >
           <Ionicons name="information-circle-outline" size={24} color="gray" />
           <Text style={styles.actionText}>See Details</Text>

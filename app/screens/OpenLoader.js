@@ -13,7 +13,7 @@ export default function OpenLoader({ navigation }) {
 
     return (
         <LinearGradient
-            colors={['#ffffff', '#007bff']}
+            colors={['#ffffff', '#ffffff']}
             style={styles.container}>
             <View style={styles.content}>
                 <Text style={styles.text}>Eyebook</Text>
@@ -36,12 +36,12 @@ const styles = StyleSheet.create({
         fontSize: 100,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#ffffff',
+        color: '#007bff',
     },
     textfooter: {
         fontSize: 20,
         textAlign: 'center',
-        color: '#ffffff',
+        color: 'black',
         marginTop: 200,
     },
 });

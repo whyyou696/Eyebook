@@ -19,7 +19,7 @@ export default function Login({ navigation }) {
 
     return (
         <LinearGradient
-            colors={['#007bff', '#ffffff']}
+            colors={['#ffffff', '#ffffff']}
             style={styles.gradient}
         >
             <View style={styles.container}>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         width: "100%",
         padding: 10,
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: "#ccc", // Hapus borderColor untuk kembali ke warna default
         borderRadius: 10,
         backgroundColor: "#fff",
         marginBottom: 10,
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         marginBottom: 20,
-        color: '#fff',
+        color: '#007bff', // Tetapkan warna teks ke putih
     },
     label: {
         marginBottom: 5,
-        color: '#fff',
+        // Hapus properti color agar kembali ke warna default
     },
     registerText: {
         marginTop: 20,
@@ -94,4 +94,5 @@ const styles = StyleSheet.create({
         color: '#007bff',
         textDecorationLine: 'underline',
     },
+    
 });

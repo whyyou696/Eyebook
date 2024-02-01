@@ -1,8 +1,11 @@
-import React from "react";
-import { View, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, ScrollView, TextInput, StyleSheet } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 import Card from "../components/Card";
 
 export default function HomeScreen({ navigation }) {
+  const [searchQuery, setSearchQuery] = useState('');
+
   const data = [
     {
       id: 1,
@@ -14,32 +17,66 @@ export default function HomeScreen({ navigation }) {
       id: 2,
       username: "Jane Smith",
       post: "Idles Joe Talbot on the perils of the music industry",
-      imageUrl:
-        "https://www.musicweek.com/cimages/6075c77e29017eaa2aadd43e7690fd98.jpg",
+      imageUrl: "https://www.musicweek.com/cimages/6075c77e29017eaa2aadd43e7690fd98.jpg",
     },
     {
       id: 3,
       username: "Jane Smith",
       post: "The Armed All Futures New Workout Plan",
-      imageUrl:
-        "https://static.stereogum.com/uploads/2021/04/ARMED_ALL_FUTURES-3283_p-1617853020-scaled.jpg",
+      imageUrl: "https://static.stereogum.com/uploads/2021/04/ARMED_ALL_FUTURES-3283_p-1617853020-scaled.jpg",
     },
     // Add more data objects as needed
   ];
 
+  const filteredData = data.filter(item => {
+    return item.username.toLowerCase().includes(searchQuery.toLowerCase()) || 
+           item.post.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={{ alignItems: "center", justifyContent: "center" }}>
-        {data.map((item) => (
-          <Card
-            key={item.id}
-            username={item.username}
-            post={item.post}
-            imageUrl={item.imageUrl}
-            onPress={() => navigation.navigate("Details")}
-          />
-        ))}
+    <View style={{ flex: 1 }}>
+      <View style={styles.searchBar}>
+        <Ionicons name="search" size={24} color="white" style={styles.searchIcon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Search"
+          onChangeText={text => setSearchQuery(text)}
+          value={searchQuery}
+        />
       </View>
-    </ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          {filteredData.map((item) => (
+            <Card
+              key={item.id}
+              username={item.username}
+              post={item.post}
+              imageUrl={item.imageUrl}
+              navigation={navigation}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: "#007bff",
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: "#fff",
+  },
+});
