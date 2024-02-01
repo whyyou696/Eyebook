@@ -13,6 +13,7 @@ const typeDefs = `#graphql
     likes: [Likes]
     createdAt: String
     updatedAt: String
+    result: User
   }
 
   type Comments {
@@ -30,7 +31,7 @@ const typeDefs = `#graphql
 
   type Query {
     getAllPost: [Post]
-    getPostById(id: ID!): Post
+    getPostById(id:ID!): Post
   }
 
   type Mutation {
@@ -57,8 +58,10 @@ const resolvers = {
       await redis.set("getAllPost", JSON.stringify(users), "EX", 5);
       return users;
     },
-    getPostById: async (_, { id }) => {
+    getPostById: async (_, {id}) => {
       const post = await Post.getPostById(id);
+      // console.log(id)
+      // console.log(post,"<<<post")
       return post;
     },
   },

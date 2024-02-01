@@ -25,10 +25,9 @@ class User {
   }
 
   static async getById({_id}) {
-    const users = database
-      .collection("users")
-      .findOne({ _id: new ObjectId(_id) });
-    return users;
+    const users = database.collection("users")
+      const user = await users.findOne({ _id: new ObjectId(_id) });
+    return user;
   }
   static async searchUser(searchQuery) {
     const users = database.collection("users");

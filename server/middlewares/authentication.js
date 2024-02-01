@@ -22,7 +22,9 @@ async function authentication(req) {
     
     const payload = verifyToken(access_token);
     const user = await User.getById({ _id: payload.id });
-    
+    // console.log(token,"<<<token")
+    // console.log(payload, "<<<payload")
+    // console.log(user, "<<<user")
     if (!user)
       throw new GraphQLError("Invalid Token", {
         extensions: {
