@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const Post = require("../models/post");
+const redis = require("../config/redis");
 
 const typeDefs = `#graphql
   type Post {
@@ -41,22 +42,28 @@ const typeDefs = `#graphql
 
 const resolvers = {
   Query: {
-    getAllPost: async (_,__,{ authentication }) => {
+    getAllPost: async (_, __, { authentication }) => {
       const auth = await authentication();
+      const cache = await redis.get("getAllPost");
       if (!auth) {
         throw new GraphQLError("Invalid User");
       }
+      if (cache) {
+        console.log("Hit To Redis");
+        return JSON.parse(cache);
+      }
+      console.log("Hit To MongoDb");
       const users = await Post.getAllPost();
+      await redis.set("getAllPost", JSON.stringify(users), "EX", 5);
       return users;
     },
     getPostById: async (_, { id }) => {
       const post = await Post.getPostById(id);
       return post;
-    }
+    },
   },
   Mutation: {
     createPost: async (_, { content, tags, imgUrl }, { authentication }) => {
-      
       const { id } = await authentication();
       if (!content) {
         throw new Error("Content is required");
@@ -72,10 +79,11 @@ const resolvers = {
         updatedAt: new Date(),
       };
       await Post.createPost(newPost);
+      await redis.del("getAllPost");
       return newPost;
     },
 
-    addComment: async (_, {_id, content }, { authentication }) => {
+    addComment: async (_, { _id, content }, { authentication }) => {
       const { username } = await authentication();
       const newComment = {
         content,
@@ -83,7 +91,7 @@ const resolvers = {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      await Post.addComment(_id,newComment);
+      await Post.addComment(_id, newComment);
       return newComment;
     },
 
@@ -94,7 +102,7 @@ const resolvers = {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      await Post.addLike(_id,newLike);
+      await Post.addLike(_id, newLike);
       return newLike;
     },
   },
