@@ -12,13 +12,26 @@ const typeDefs = `#graphql
     password: String!
   }
 
+
+  type UserFollowingFollowers {
+    _id: ID
+    name: String
+    username: String!
+    email: String!
+    password: String!
+    followings: [Follow]
+    userFollowing: [User]
+    followers: [Follow]
+    userFollowers: [User]
+  }
+
   type Token {
     access_token: String
   }
 
   type Query {
     getAllUser: [User]
-    getById(id: ID!): User
+    getById(_id: ID!): UserFollowingFollowers
     searchUser(searchQuery: String!): [User]
   }
 
@@ -45,9 +58,9 @@ const resolvers = {
       const users = await User.getAllUser();
       return users;
     },
-    getById: async (_,{id}, { authentication }) => {
+    getById: async (_,{_id}, { authentication }) => {
       const auth = await authentication();
-      const getUserbyId = await User.getById(id)
+      const getUserbyId = await User.getById({_id})
       return getUserbyId;
   },
     searchUser: async (_, { searchQuery }, {authentication}) => {
