@@ -7,14 +7,11 @@ export default function Login({ navigation }) {
     const [password, setPassword] = React.useState("");
 
     const handleLogin = () => {
-        // Implement your login logic here
-        // For demo purposes, let's just navigate to the Home screen
         navigation.navigate("Home");
     };
 
     const handleRegister = () => {
-        // Navigate to the Register screen
-        navigation.navigate("Register");
+        navigation.navigate("RegisterForm");
     };
 
     return (

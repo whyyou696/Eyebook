@@ -1,84 +1,121 @@
-import React from 'react';
-import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-export default function Card({ username, post, imageUrl, navigation }) {
+export default function Card({ post }) {
+  const navigation = useNavigation();
+
+  const handleDetailsPress = () => {
+    navigation.navigate("DetailsPost", {
+      postId: post._id,
+      postAuthorUserName: post.authorIdResult.username,
+      postAuthorProfileImg: post.authorIdResult.profileimg,
+      postTags: post.tags,
+      postAllComments: post.comments.content,
+      postCommentsUser: post.comments.username,
+      postLikesCount: post.likes.length,
+      postDate: post.createdAt,
+      postContent: post.content,
+      imageUrl: post.imgUrl,
+    });
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.username}>{username}</Text>
+        {post.authorIdResult && ( // Pengecekan apakah data penulis tersedia
+          <View style={styles.authorContainer}>
+            <Image
+              source={{ uri: post.authorIdResult.profileimg }}
+              style={styles.profileImage}
+            />
+            <Text style={styles.author}>{post.authorIdResult.username}</Text>
+          </View>
+        )}
       </View>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
-      <View style={styles.content}>
-        <Text style={styles.post}>{post}</Text>
-      </View>
-      <View style={styles.actions}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="thumbs-up-outline" size={24} color="gray" />
-          <Text style={styles.actionText}>Like</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('DetailsPost')} // Navigasi ke halaman detail
-        >
+      <Image source={{ uri: post.imgUrl }} style={styles.postImage} />
+      <Text style={styles.content}>{post.content}</Text>
+      <Text style={styles.tags}># {post.tags}</Text>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleDetailsPress}>
           <Ionicons name="information-circle-outline" size={24} color="gray" />
-          <Text style={styles.actionText}>See Details</Text>
+          <Text style={styles.buttonText}>See Details</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   card: {
-    margin: 5,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
+    width: "100%",
+    marginBottom: 20,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
     elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#333",
     shadowOpacity: 0.3,
     shadowRadius: 2,
-    width: '100%',
   },
   header: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
   },
-  username: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
+  postImage: {
+    width: "100%",
+    height: 300,
+    resizeMode: "cover",
   },
   content: {
     padding: 10,
   },
-  post: {
-    fontSize: 14,
-  },
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 5,
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: "#ccc",
+    marginTop: 10,
+    paddingTop: 10,
   },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5,
+  },
+  buttonText: {
+    marginLeft: 3,
+  },
+  tags: {
     padding: 10,
-    borderRadius: 5,
-    backgroundColor: '#ffffff',
+    color: "gray",
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "right",
+    fontStyle: "italic",
   },
-  actionText: {
-    marginLeft: 5,
+  authorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 5,
+    // Tambahkan padding pada profile image
+    padding: 5,
+  },
+  author: {
+    color: "black", // Ubah warna teks agar sesuai dengan background
     fontSize: 16,
-    color: 'gray',
+    fontWeight: "bold",
+    fontStyle: "italic",
+    // Tambahkan padding pada username
+    paddingLeft: 2,
   },
 });

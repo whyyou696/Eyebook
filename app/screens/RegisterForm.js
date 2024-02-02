@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, TextInput, View, Text, StyleSheet } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function Register({ navigation }) {
+export default function RegisterForm({ navigation }) {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");

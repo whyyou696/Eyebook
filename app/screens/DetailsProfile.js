@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Image, Text, View, StyleSheet, ScrollView } from 'react-native';
+import {Image, Text, View, StyleSheet, ScrollView } from 'react-native';
 
 export default function DetailsProfile({ navigation }) {
   return (
@@ -14,13 +14,6 @@ export default function DetailsProfile({ navigation }) {
           <Text style={styles.content}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           </Text>
-        </View>
-        <View style={styles.followButtonContainer}>
-          <Button
-            title="Follow"
-            onPress={() => {
-            }}
-          />
         </View>
       </View>
     </ScrollView>
@@ -50,10 +43,5 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     textAlign: 'center',
-  },
-  followButtonContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-    borderRadius: 5,
   },
 });
