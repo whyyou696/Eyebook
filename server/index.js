@@ -17,7 +17,7 @@ connect().then(() => {
       listen: { port: 3000 },
       context: ({ req }) => {
           return {
-              authentication: async () => await authentication(req),
+              authentication: () => authentication(req),
           }
       }
   })

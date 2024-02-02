@@ -24,12 +24,12 @@ class User {
     return user;
   }
 
-  static async getById({_id}) {
+  static async getById({auth,_id}) {
     const agg = [
       {
         $match:
           {
-            _id: new ObjectId(_id),
+            _id: new ObjectId(auth.id),
           },
       },
       {
@@ -37,7 +37,7 @@ class User {
           {
             from: "follows",
             localField: "_id",
-            foreignField: "followingId",
+            foreignField: "followerId",
             as: "followings",
           },
       },
@@ -71,7 +71,6 @@ class User {
     ]
     const users = database.collection("users")
       const user = await users.aggregate(agg).toArray();
-      console.log(user, '<<<user')
     return user[0];
   }
   static async searchUser(searchQuery) {

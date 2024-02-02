@@ -58,10 +58,17 @@ const resolvers = {
       const users = await User.getAllUser();
       return users;
     },
-    getById: async (_,{_id}, { authentication }) => {
+    getById: async (_,{_id}, { authentication}) => {
+      try {
+        console.log(authentication, "<<<authentication, getById");
       const auth = await authentication();
-      const getUserbyId = await User.getById({_id})
-      return getUserbyId;
+      console.log(auth, "<<<auth");
+      const getUserbyId = await User.getById({auth, _id})
+      return getUserbyId;  
+      } catch (error) {
+        console.log(error)
+      }
+      
   },
     searchUser: async (_, { searchQuery }, {authentication}) => {
       const auth = await authentication()
@@ -123,6 +130,8 @@ const resolvers = {
       }
       const access_token = signToken({
         id: user._id,
+        email: user.email,
+        username: user.username,
       });
       return { access_token };
     },
