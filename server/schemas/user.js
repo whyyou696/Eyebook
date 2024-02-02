@@ -10,6 +10,7 @@ const typeDefs = `#graphql
     username: String!
     email: String!
     password: String!
+    profileimg: String!
   }
 
 
@@ -19,6 +20,7 @@ const typeDefs = `#graphql
     username: String!
     email: String!
     password: String!
+    profileimg: String!
     followings: [Follow]
     userFollowing: [User]
     followers: [Follow]
@@ -40,6 +42,7 @@ const typeDefs = `#graphql
     username: String!,
     email: String!,
     password: String!,
+    profileimg: String!
   }
   
   type Mutation {
@@ -60,9 +63,7 @@ const resolvers = {
     },
     getById: async (_,{_id}, { authentication}) => {
       try {
-        console.log(authentication, "<<<authentication, getById");
       const auth = await authentication();
-      console.log(auth, "<<<auth");
       const getUserbyId = await User.getById({auth, _id})
       return getUserbyId;  
       } catch (error) {
@@ -76,14 +77,16 @@ const resolvers = {
       return match;
     }
   },
+  
   Mutation: {
     addUser: async (_, { UserInput }) => {
-      const { name, username, email, password } = UserInput;
+      const { name, username, email, password, profileimg } = UserInput;
       const newUser = {
         name,
         username,
         email,
         password: hashPassword(password),
+        profileimg
       };
       // check email exist
       const emailExist = await User.getByEmail({ email });

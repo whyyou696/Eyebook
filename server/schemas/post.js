@@ -16,6 +16,19 @@ const typeDefs = `#graphql
     result: User
   }
 
+  type AllPost {
+    _id: ID
+    content: String!
+    tags: [String]
+    imgUrl: String
+    authorId: ID!
+    comments: [Comments]
+    likes: [Likes]
+    createdAt: String
+    updatedAt: String
+    authorIdResult: User
+  }
+
   type Comments {
     content: String!
     username: String!
@@ -30,7 +43,7 @@ const typeDefs = `#graphql
   }
 
   type Query {
-    getAllPost: [Post]
+    getAllPost: [AllPost]
     getPostById(id:ID!): Post
   }
 
@@ -44,11 +57,11 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     getAllPost: async (_, __, { authentication }) => {
-      const auth = await authentication();
+      // const auth = await authentication();
       const cache = await redis.get("getAllPost");
-      if (!auth) {
-        throw new GraphQLError("Invalid User");
-      }
+      // if (!auth) {
+      //   throw new GraphQLError("Invalid User");
+      // }
       if (cache) {
         console.log("Hit To Redis");
         return JSON.parse(cache);

@@ -1,18 +1,33 @@
 const { ObjectId } = require("mongodb");
 const { database } = require("../config/mongodb");
 
-
 class Post {
   static async getAllPost() {
+    const agg = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "authorId",
+          foreignField: "_id",
+          as: "authorIdResult",
+        },
+      },
+      {
+        $unwind: {
+          path: "$authorIdResult",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ];
     const posts = database.collection("posts");
-    const result = await posts.find({}).toArray();
+    const result = await posts.aggregate(agg).toArray();
     return result;
   }
-  static async getPostById(id) {
+  static async getPostById(_id) {
     const agg = [
       {
         $match: {
-          _id: new ObjectId(id),
+          _id: new ObjectId(_id),
         },
       },
       {
@@ -30,10 +45,8 @@ class Post {
         },
       },
     ];
-
     const posts = database.collection("posts");
     const result = await posts.aggregate(agg).toArray();
-    // console.log(result, "<<<result");
     return result[0];
   }
   static async createPost(newPost) {
