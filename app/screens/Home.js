@@ -1,6 +1,5 @@
-// HomeScreen.js
 import React from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, ScrollView, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
@@ -45,20 +44,6 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Navbar navigation={navigation} />
-      <View style={styles.centeredContainer}>
-        <TouchableOpacity
-          style={styles.createPostButton}
-          onPress={() => navigation.navigate("CreatePost")}
-        >
-          <Ionicons
-            name="duplicate-outline"
-            size={24}
-            color="white"
-            style={styles.createPostIcon}
-          />
-          <Text style={styles.createPostButtonText}>Create Post</Text>
-        </TouchableOpacity>
-      </View>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{ alignItems: "center" }}>
           {loading ? (
@@ -75,24 +60,3 @@ export default function HomeScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  centeredContainer: {
-    alignItems: "center",
-  },
-  createPostButton: {
-    backgroundColor: "#007bff",
-    padding: 10,
-    alignItems: "center",
-    flexDirection: "row",
-    width: "100%", // Menjadikan tombol mengisi seluruh lebar layar
-  },
-  createPostIcon: {
-    marginRight: 5,
-  },
-  createPostButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});

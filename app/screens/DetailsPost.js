@@ -1,26 +1,27 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import React from "react";
+import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome
 
 export default function DetailsPost({ route }) {
-  const { 
+  const {
     postAuthorUserName,
     postAuthorProfileImg,
     postTags,
     postComments,
-    postCommentsUser,
     postLikesCount,
     postDate,
     postContent,
-    imageUrl 
+    imageUrl,
   } = route.params;
-
-  console.log(route.params)
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.authorContainer}>
-            <Image source={{ uri: postAuthorProfileImg }} style={styles.profileImage} />
+            <Image
+              source={{ uri: postAuthorProfileImg }}
+              style={styles.profileImage}
+            />
             <Text style={styles.username}>{postAuthorUserName}</Text>
           </View>
           <Text style={styles.postDate}>{postDate}</Text>
@@ -32,23 +33,20 @@ export default function DetailsPost({ route }) {
         <View style={styles.commentsContainer}>
           <Text style={styles.commentsHeader}>Comments:</Text>
           {/* Tampilkan komentar secara statis */}
-          <View style={styles.commentItem}>
-            <View style={styles.bubble}>
-              <Text style={styles.commentText}>{postComments && postComments[0]}</Text>
+          {postComments.map((comment, index) => (
+            <View key={index} style={styles.commentItem}>
+              <View style={styles.bubble}>
+                <Text style={styles.commentUser}>{comment.username}</Text>
+                <Text style={styles.commentText}>{comment.content}</Text>
+              </View>
             </View>
-            <Text style={styles.commentUser}>{postCommentsUser && postCommentsUser[0]}</Text>
-          </View>
-          <View style={styles.commentItem}>
-            <View style={styles.bubble}>
-              <Text style={styles.commentText}>{postComments && postComments[1]}</Text>
-            </View>
-            <Text style={styles.commentUser}>{postCommentsUser && postCommentsUser[1]}</Text>
-          </View>
-          {/* Tambahkan lebih banyak blok komentar sesuai kebutuhan */}
+          ))}
         </View>
         <View style={styles.footer}>
-          <Text style={styles.likes}>Likes: {postLikesCount}</Text>
-          <Text style={styles.tags}>Tags: #{postTags}</Text>
+          {/* Ganti teks "Likes" dengan ikon thumb-up */}
+          <FontAwesome name="thumbs-up" size={24} color="#007bff" />
+          <Text style={styles.likes}>{postLikesCount}</Text>
+          <Text style={styles.tags}>#{postTags}</Text>
         </View>
       </View>
     </ScrollView>
@@ -58,19 +56,19 @@ export default function DetailsPost({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd"
   },
   authorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   profileImage: {
     width: 40,
@@ -80,15 +78,16 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "black"
   },
   postDate: {
-    color: '#888',
+    color: "#888",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 300,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   content: {
     padding: 20,
@@ -99,47 +98,46 @@ const styles = StyleSheet.create({
   commentsContainer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: "#ddd",
   },
   commentsHeader: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   commentItem: {
     marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   bubble: {
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    maxWidth: '80%',
-  },
-  commentText: {
-    color: '#fff',
+    maxWidth: "80%",
   },
   commentUser: {
-    marginLeft: 10,
-    color: '#888',
-    fontStyle: 'italic',
+    color: "#fff",
+    fontWeight: "bold",
+    fontStyle: "italic",
+  },
+  commentText: {
+    color: "#fff",
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: "#ddd",
   },
   likes: {
     fontSize: 16,
+    marginLeft: 3, // Beri jarak antara ikon dan teks
   },
   tags: {
-    color: 'gray',
+    color: "gray",
     fontSize: 12,
-    fontStyle: 'italic',
+    fontStyle: "italic",
+    marginLeft: 300,
   },
 });

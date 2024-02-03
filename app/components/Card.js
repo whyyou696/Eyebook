@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Card({ post }) {
@@ -12,8 +12,7 @@ export default function Card({ post }) {
       postAuthorUserName: post.authorIdResult.username,
       postAuthorProfileImg: post.authorIdResult.profileimg,
       postTags: post.tags,
-      postAllComments: post.comments.content,
-      postCommentsUser: post.comments.username,
+      postComments: post.comments,
       postLikesCount: post.likes.length,
       postDate: post.createdAt,
       postContent: post.content,
@@ -24,7 +23,7 @@ export default function Card({ post }) {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        {post.authorIdResult && ( // Pengecekan apakah data penulis tersedia
+        {post.authorIdResult && (
           <View style={styles.authorContainer}>
             <Image
               source={{ uri: post.authorIdResult.profileimg }}
@@ -38,9 +37,21 @@ export default function Card({ post }) {
       <Text style={styles.content}>{post.content}</Text>
       <Text style={styles.tags}># {post.tags}</Text>
       <View style={styles.buttonContainer}>
+        <Text style={[styles.infoText]}>
+          <FontAwesome name="thumbs-up" size={30} color="#007bff" />{" "}
+          {post.likes.length} Likes
+        </Text>
+        <Text style={[styles.infoText]}>
+          <FontAwesome
+            name="comments"
+            size={30}
+            color="#007bff"
+          />{" "}
+          {post.comments.length} Comments
+        </Text>
         <TouchableOpacity style={styles.button} onPress={handleDetailsPress}>
-          <Ionicons name="information-circle-outline" size={24} color="gray" />
-          <Text style={styles.buttonText}>See Details</Text>
+          <FontAwesome name="file" size={20} color="#007bff" />
+          <Text style={styles.infoText}>See Details</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -75,19 +86,22 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
     borderTopWidth: 1,
     borderTopColor: "#ccc",
     marginTop: 10,
     paddingTop: 10,
+    justifyContent: "space-around",
+    marginBottom: 10,
   },
   button: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 5,
+
   },
-  buttonText: {
-    marginLeft: 3,
+  infoText: {
+    color: "gray",
+    fontSize: 13,
+    marginLeft: 5,
   },
   tags: {
     padding: 10,
@@ -107,15 +121,13 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     marginRight: 5,
-    // Tambahkan padding pada profile image
     padding: 5,
   },
   author: {
-    color: "black", // Ubah warna teks agar sesuai dengan background
+    color: "black",
     fontSize: 16,
     fontWeight: "bold",
     fontStyle: "italic",
-    // Tambahkan padding pada username
     paddingLeft: 2,
   },
 });

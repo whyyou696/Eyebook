@@ -7,6 +7,7 @@ export default function RegisterForm({ navigation }) {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [profileimg, setProfileimg] = useState("");
 
     const handleRegister = () => {
         navigation.navigate("Login");
@@ -59,6 +60,16 @@ export default function RegisterForm({ navigation }) {
                         secureTextEntry={true}
                         value={password}
                         onChangeText={setPassword}
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Profile Image</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your http:// image"
+                        secureTextEntry={true}
+                        value={profileimg}
+                        onChangeText={setProfileimg}
                     />
                 </View>
                 <Button

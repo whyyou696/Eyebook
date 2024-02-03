@@ -6,7 +6,7 @@ export default function OpenLoader({ navigation }) {
     useEffect(() => {
         const redirectTimer = setTimeout(() => {
             navigation.navigate('Login');
-        }, 5000);
+        }, 2000);
 
         return () => clearTimeout(redirectTimer);
     }, [navigation]);
