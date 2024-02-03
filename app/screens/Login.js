@@ -25,7 +25,7 @@ export default function Login({ navigation }) {
 
   const [login, { loading, error, data }] = useMutation(LOGIN_MUTATION, {
     onCompleted: async (data) => {
-       console.log(data, "<<< data");
+    //    console.log(data, "<<< data");
        SecureStore.setItemAsync("access_token", data.login.access_token);
       authContext.setIsSignedIn(true);
     },
