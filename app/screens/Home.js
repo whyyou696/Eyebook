@@ -1,11 +1,11 @@
 import React from "react";
 import { View, ScrollView, StyleSheet, Text } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
 import { gql, useQuery } from "@apollo/client";
+import NavigatorHome from "../components/NavigatorHome";
 
-const GETALLPOST_QUERY = gql`
+export const GETALLPOST_QUERY = gql`
  query GetAllPost {
   getAllPost {
     _id
@@ -44,6 +44,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <Navbar navigation={navigation} />
+      <NavigatorHome navigation={navigation} />      
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{ alignItems: "center" }}>
           {loading ? (

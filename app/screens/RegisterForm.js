@@ -29,11 +29,6 @@ export default function RegisterForm({ navigation }) {
       navigation.navigate("Login");
     }
   });
-  console.log(email,"<<<email");
-  console.log(name,"<<<name");
-  console.log(username,"<<<username");
-  console.log(password,"<<<password");
-  console.log(profileimg,"<<<profileimg");
 
   return (
     <LinearGradient colors={["#ffffff", "#ffffff"]} style={styles.gradient}>

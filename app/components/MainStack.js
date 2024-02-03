@@ -47,7 +47,7 @@ export default function MainStack() {
             />
             <Stack.Screen name="DetailsProfile" component={DetailsProfile} />
             <Stack.Screen name="DetailsPost" component={DetailsPost} />
-            <Stack.Screen name="CreatePost" component={CreatePost} />
+            <Stack.Screen name="CreatePost" component={CreatePost} options={{title: "Back"}} />
           </>
         )}
       </Stack.Navigator>

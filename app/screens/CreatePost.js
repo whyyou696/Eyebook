@@ -1,18 +1,55 @@
+import { gql, useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { GETALLPOST_QUERY } from "./Home";
 
 export default function CreatePost() {
   const [content, setContent] = useState("");
   const [tags, setTags] = useState("");
   const [imgUrl, setImgUrl] = useState("");
 
-  const handleCreatePost = () => {
-    // Kirim data post ke backend atau lakukan tindakan lainnya
-    console.log("Content:", content);
-    console.log("Tags:", tags);
-    console.log("Image URL:", imgUrl);
-  };
+  const CREATEPOST_MUTATION = gql`
+    mutation CreatePost($content: String!, $tags: [String], $imgUrl: String) {
+      createPost(content: $content, tags: $tags, imgUrl: $imgUrl) {
+        _id
+        content
+        tags
+        imgUrl
+        authorId
+        comments {
+          content
+          createdAt
+          updatedAt
+          username
+        }
+        likes {
+          createdAt
+          updatedAt
+          username
+        }
+        createdAt
+        updatedAt
+        result {
+          _id
+          email
+          name
+          profileimg
+          username
+        }
+      }
+    }
+  `;
 
+  const [createPost] = useMutation(CREATEPOST_MUTATION, {
+    refetchQueries: [GETALLPOST_QUERY],
+    onCompleted: () => navigation.navigate("Home"),
+  });
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Post</Text>
@@ -34,8 +71,13 @@ export default function CreatePost() {
         onChangeText={(text) => setImgUrl(text)}
         value={imgUrl}
       />
-      <TouchableOpacity style={styles.createButton} onPress={handleCreatePost}>
-        <Text style={styles.buttonText}>Create Post</Text>
+      <TouchableOpacity style={styles.createButton}>
+        <Text
+          style={styles.buttonText}
+          onPress={() => createPost({ variables: { content, tags, imgUrl } })}
+        >
+          Create Post
+        </Text>
       </TouchableOpacity>
     </View>
   );

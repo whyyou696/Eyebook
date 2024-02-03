@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
 import * as SecureStore from "expo-secure-store";
 
@@ -12,10 +11,8 @@ export default function LogoutButton() {
       onPress={async () => {
           await SecureStore.deleteItemAsync("access_token");
           authContext.setIsSignedIn(false);
-        
       }}
     >
-      <FontAwesome name="sign-out" size={24} color="#007bff" />
       <Text style={styles.buttonText}>Logout</Text>
     </TouchableOpacity>
   );
@@ -23,13 +20,15 @@ export default function LogoutButton() {
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: "row",
-    alignItems: "center",
     marginRight: 20,
   },
   buttonText: {
     fontSize: 16,
-    color: "#007bff",
-    marginLeft: 5,
+    color: "white",
+    fontWeight: "bold",
+    padding: 8,
+    backgroundColor: "#007bff",
+    borderRadius: 10,
+
   },
 });

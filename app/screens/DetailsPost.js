@@ -1,9 +1,23 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, StyleSheet, ScrollView, TextInput, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome
+import { gql, useMutation } from "@apollo/client"; // Import useMutation from Apollo Client
+import { GETALLPOST_QUERY } from "./Home";
+// Define mutation for adding comment
+const ADD_COMMENT_MUTATION = gql`
+  mutation AddComment($content: String!, $id: ID!) {
+    addComment(content: $content, _id: $id) {
+      content
+      updatedAt
+      createdAt
+      username
+    }
+  }
+`;
 
 export default function DetailsPost({ route }) {
   const {
+    postId,
     postAuthorUserName,
     postAuthorProfileImg,
     postTags,
@@ -13,6 +27,27 @@ export default function DetailsPost({ route }) {
     postContent,
     imageUrl,
   } = route.params;
+
+  // State to store new comment content
+  const [newComment, setNewComment] = useState("");
+
+  // Mutation hook for adding comment
+  const [addComment] = useMutation(ADD_COMMENT_MUTATION, {
+   refetchQueries: [GETALLPOST_QUERY],
+    onCompleted: () => {
+      // Reset new comment input after adding comment
+      setNewComment("");
+    },
+  });
+
+  // Function to handle adding comment
+  const handleAddComment = () => {
+    if (newComment.trim() !== "") {
+      // Call mutation to add comment
+      addComment({ variables: { content: newComment, id: postId } });
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -32,7 +67,7 @@ export default function DetailsPost({ route }) {
         </View>
         <View style={styles.commentsContainer}>
           <Text style={styles.commentsHeader}>Comments:</Text>
-          {/* Tampilkan komentar secara statis */}
+          {/* Render existing comments */}
           {postComments.map((comment, index) => (
             <View key={index} style={styles.commentItem}>
               <View style={styles.bubble}>
@@ -41,9 +76,20 @@ export default function DetailsPost({ route }) {
               </View>
             </View>
           ))}
+          {/* Input for new comment */}
+          <View style={styles.newCommentContainer}>
+            <TextInput
+              style={styles.newCommentInput}
+              placeholder="Add a comment..."
+              value={newComment}
+              onChangeText={setNewComment}
+            />
+            <TouchableOpacity style={styles.addCommentButton} onPress={handleAddComment}>
+              <FontAwesome name="plus" size={16} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.footer}>
-          {/* Ganti teks "Likes" dengan ikon thumb-up */}
           <FontAwesome name="thumbs-up" size={24} color="#007bff" />
           <Text style={styles.likes}>{postLikesCount}</Text>
           <Text style={styles.tags}>#{postTags}</Text>
@@ -123,6 +169,24 @@ const styles = StyleSheet.create({
   commentText: {
     color: "#fff",
   },
+  newCommentContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  newCommentInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginRight: 10,
+  },
+  addCommentButton: {
+    backgroundColor: "#007bff",
+    borderRadius: 5,
+    padding: 10,
+  },
   footer: {
     flexDirection: "row",
     alignItems: "center",
@@ -132,7 +196,7 @@ const styles = StyleSheet.create({
   },
   likes: {
     fontSize: 16,
-    marginLeft: 3, // Beri jarak antara ikon dan teks
+    marginLeft: 3,
   },
   tags: {
     color: "gray",
