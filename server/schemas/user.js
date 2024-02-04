@@ -74,10 +74,12 @@ const resolvers = {
     searchUser: async (_, { searchQuery }, {authentication}) => {
       const auth = await authentication()
       const match = await User.searchUser(searchQuery);
+      console.log(searchQuery, "<<< searchQuery");
+      console.log(match, "<<< match");
       return match;
     }
   },
-  
+
   Mutation: {
     addUser: async (_, { UserInput }) => {
       const { name, username, email, password, profileimg } = UserInput;

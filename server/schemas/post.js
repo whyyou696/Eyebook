@@ -57,11 +57,11 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     getAllPost: async (_, __, { authentication }) => {
-      // const auth = await authentication();
+      const auth = await authentication();
       const cache = await redis.get("getAllPost");
-      // if (!auth) {
-      //   throw new GraphQLError("Invalid User");
-      // }
+      if (!auth) {
+        throw new GraphQLError("Invalid User");
+      }
       if (cache) {
         console.log("Hit To Redis");
         return JSON.parse(cache);

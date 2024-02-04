@@ -19,6 +19,4 @@ async function connect() {
   }
 }
 const database = client.db('gc01');
-
-
 module.exports = { connect, database }

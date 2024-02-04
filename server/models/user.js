@@ -24,53 +24,48 @@ class User {
     return user;
   }
 
-  static async getById({auth,_id}) {
+  static async getById({ auth, _id }) {
     const agg = [
       {
-        $match:
-          {
-            _id: new ObjectId(auth.id),
-          },
+        $match: {
+          _id: new ObjectId(auth.id),
+        },
       },
       {
-        $lookup:
-          {
-            from: "follows",
-            localField: "_id",
-            foreignField: "followerId",
-            as: "followings",
-          },
+        $lookup: {
+          from: "follows",
+          localField: "_id",
+          foreignField: "followerId",
+          as: "followings",
+        },
       },
       {
-        $lookup:
-          {
-            from: "users",
-            localField: "followings.followingId",
-            foreignField: "_id",
-            as: "userFollowing",
-          },
+        $lookup: {
+          from: "users",
+          localField: "followings.followingId",
+          foreignField: "_id",
+          as: "userFollowing",
+        },
       },
       {
-        $lookup:
-          {
-            from: "follows",
-            localField: "_id",
-            foreignField: "followingId",
-            as: "followers",
-          },
+        $lookup: {
+          from: "follows",
+          localField: "_id",
+          foreignField: "followingId",
+          as: "followers",
+        },
       },
       {
-        $lookup:
-          {
-            from: "users",
-            localField: "followers.followerId",
-            foreignField: "_id",
-            as: "userFollowers",
-          },
+        $lookup: {
+          from: "users",
+          localField: "followers.followerId",
+          foreignField: "_id",
+          as: "userFollowers",
+        },
       },
-    ]
-    const users = database.collection("users")
-      const user = await users.aggregate(agg).toArray();
+    ];
+    const users = database.collection("users");
+    const user = await users.aggregate(agg).toArray();
     return user[0];
   }
   static async searchUser(searchQuery) {
