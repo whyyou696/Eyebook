@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, ScrollView, TextInput, TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome
-import { gql, useMutation } from "@apollo/client"; // Import useMutation from Apollo Client
+import { FontAwesome } from "@expo/vector-icons";
+import { gql, useMutation } from "@apollo/client";
 import { GETALLPOST_QUERY } from "./Home";
-// Define mutation for adding comment
+
 const ADD_COMMENT_MUTATION = gql`
   mutation AddComment($content: String!, $id: ID!) {
     addComment(content: $content, _id: $id) {
@@ -11,6 +11,16 @@ const ADD_COMMENT_MUTATION = gql`
       updatedAt
       createdAt
       username
+    }
+  }
+`;
+
+const ADD_LIKE_MUTATION = gql`
+  mutation AddLike($id: ID!) {
+    addLike(_id: $id) {
+      username
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -28,24 +38,27 @@ export default function DetailsPost({ route }) {
     imageUrl,
   } = route.params;
 
-  // State to store new comment content
   const [newComment, setNewComment] = useState("");
 
-  // Mutation hook for adding comment
   const [addComment] = useMutation(ADD_COMMENT_MUTATION, {
-   refetchQueries: [GETALLPOST_QUERY],
+    refetchQueries: [{ query: GETALLPOST_QUERY }],
     onCompleted: () => {
-      // Reset new comment input after adding comment
       setNewComment("");
     },
   });
 
-  // Function to handle adding comment
+  const [addLike] = useMutation(ADD_LIKE_MUTATION, {
+    refetchQueries: [{ query: GETALLPOST_QUERY }],
+  });
+
   const handleAddComment = () => {
     if (newComment.trim() !== "") {
-      // Call mutation to add comment
       addComment({ variables: { content: newComment, id: postId } });
     }
+  };
+
+  const handleAddLike = () => {
+    addLike({ variables: { id: postId } });
   };
 
   return (
@@ -67,7 +80,6 @@ export default function DetailsPost({ route }) {
         </View>
         <View style={styles.commentsContainer}>
           <Text style={styles.commentsHeader}>Comments:</Text>
-          {/* Render existing comments */}
           {postComments.map((comment, index) => (
             <View key={index} style={styles.commentItem}>
               <View style={styles.bubble}>
@@ -76,7 +88,6 @@ export default function DetailsPost({ route }) {
               </View>
             </View>
           ))}
-          {/* Input for new comment */}
           <View style={styles.newCommentContainer}>
             <TextInput
               style={styles.newCommentInput}
@@ -90,7 +101,9 @@ export default function DetailsPost({ route }) {
           </View>
         </View>
         <View style={styles.footer}>
-          <FontAwesome name="thumbs-up" size={24} color="#007bff" />
+          <TouchableOpacity onPress={handleAddLike}>
+            <FontAwesome name="thumbs-up" size={24} color="#007bff" />
+          </TouchableOpacity>
           <Text style={styles.likes}>{postLikesCount}</Text>
           <Text style={styles.tags}>#{postTags}</Text>
         </View>

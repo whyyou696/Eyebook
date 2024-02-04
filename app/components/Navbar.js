@@ -18,11 +18,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 25,
+    paddingVertical: 20,
     paddingHorizontal: 30,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+    marginTop:30
   },
   navigationBarTitle: {
     fontSize: 30,

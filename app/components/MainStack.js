@@ -2,13 +2,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/Home";
 import Login from "../screens/Login";
 import OpenLoader from "../screens/OpenLoader";
-import DetailsProfile from "../screens/DetailsProfile";
 import DetailsPost from "../screens/DetailsPost";
 import RegisterForm from "../screens/RegisterForm";
 import CreatePost from "../screens/CreatePost";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { NavigationContainer } from "@react-navigation/native";
+import SearchUser from "../screens/SearchUser";
+import Profile from "../screens/Profile";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,9 +46,10 @@ export default function MainStack() {
               component={HomeScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="DetailsProfile" component={DetailsProfile} />
-            <Stack.Screen name="DetailsPost" component={DetailsPost} />
+            <Stack.Screen name="DetailsPost" component={DetailsPost} options={{title: "Back"}} />
             <Stack.Screen name="CreatePost" component={CreatePost} options={{title: "Back"}} />
+            <Stack.Screen name="SearchUser" component={SearchUser}  options={{title: "Back"}}/>
+            <Stack.Screen name="Profile" component={Profile} options={{title: "Back"}}/>
           </>
         )}
       </Stack.Navigator>
