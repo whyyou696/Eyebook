@@ -1,6 +1,7 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
+
 const {ApolloServer} = require("@apollo/server");
 const {startStandaloneServer} = require("@apollo/server/standalone")
 const { connect } = require("./config/mongodb");
@@ -16,7 +17,7 @@ const server = new ApolloServer({
 
 connect().then(() => {
   return startStandaloneServer(server, {
-      listen: { port: 3000 },
+      listen: { port: 3000 || process.env.PORT },
       context: ({ req }) => {
           return {
               authentication: () => authentication(req),
